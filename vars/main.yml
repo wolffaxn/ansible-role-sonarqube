@@ -1,0 +1,9 @@
+---
+# sonar download mirror
+sonar_mirror: "https://sonarsource.bintray.com/Distribution/sonarqube"
+# sonar binary archive
+sonar_binary_archive: sonarqube-{{ sonar_version }}.zip
+
+# download settings
+download_delay: 10
+download_retries: 5

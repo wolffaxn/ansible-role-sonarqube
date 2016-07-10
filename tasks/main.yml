@@ -1,0 +1,68 @@
+---
+- name: assert platform is supported
+  assert:
+    that:
+      - ansible_architecture in ['x86_64']
+      - ansible_os_family in ['RedHat']
+
+- name: set os name
+  set_fact:
+    os_name: linux
+  when: ansible_system == 'Linux'
+
+- name: set os architecture
+  set_fact:
+    os_arch: x64
+  when: ansible_architecture == 'x86_64'
+
+- name: include version-specific variables
+  include_vars: "versions/{{ sonar_version }}.yml"
+
+- name: ensure download directory exists
+  file: path="{{ sonar_download_dir }}" state=directory
+
+- name: download SonarQube binary archive (zip)
+  get_url:
+    url: "{{ sonar_mirror }}/{{ sonar_binary_archive }}"
+    checksum: "{{ sonar_redis_checksum }}"
+    dest: "{{ sonar_download_dir }}/{{ sonar_binary_archive }}"
+    owner: root
+    group: root
+    mode: "u=rwx,go=rx"
+  register: sonar_redis_get
+  until: "'OK' in sonar_redis_get.msg or 'file already exists' in sonar_redis_get.msg"
+  delay: "{{ download_delay }}"
+  retries: "{{ download_retries }}"
+
+- name: ensure installation directory exists
+  file:
+    path: "{{ sonar_install_dir }}/sonarqube-{{ sonar_version }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "u=rwx,go=rx"
+
+- name: install 'unzip', if necessary
+  package: name=unzip state=present
+
+- name: install SonarQube binary archive (zip)
+  unarchive:
+    src: "{{ sonar_download_dir }}/{{ sonar_binary_archive }}"
+    dest: "{{ sonar_install_dir }}"
+    owner: root
+    group: root
+    copy: no
+
+- name: create symbolic link
+  file:
+    src: "{{ sonar_install_dir }}/sonarqube-{{ sonar_version }}"
+    dest: "{{ sonar_install_dir }}/sonarqube"
+    force: true
+    state: link
+
+- name: remove temporary downloaded files, if requested
+  file: path="{{ sonar_download_dir }}/{{ item }}" state=absent
+  with_items:
+    - "{{ sonar_binary_archive }}"
+  ignore_errors: true
+  when: sonar_download_cleanup
