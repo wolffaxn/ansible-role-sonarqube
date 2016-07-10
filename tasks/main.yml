@@ -60,6 +60,20 @@
     force: true
     state: link
 
+- name: configure SonarQube JDBC settings
+  lineinfile:
+    dest: "{{ sonar_install_dir }}/sonarqube-{{ sonar_version }}/conf/sonar.properties"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  notify: restart sonar
+  with_items:
+    - regexp: "^sonar.jdbc.username"
+      line: "sonar.jdbc.username={{ sonar_database_username }}"
+    - regexp: "^sonar.jdbc.password"
+      line: "sonar.jdbc.password={{ sonar_database_password }}"
+    - regexp: "^sonar.jdbc.url"
+      line: "sonar.jdbc.url=jdbc:{{ sonar_database }}://{{ sonar_database_host }}:{{ sonar_database_port }}/{{ sonar_database_name }}?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance"
+
 - name: remove temporary downloaded files, if requested
   file: path="{{ sonar_download_dir }}/{{ item }}" state=absent
   with_items:

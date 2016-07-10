@@ -5,3 +5,13 @@ sonar_version: 5.6
 sonar_download_dir: /tmp
 sonar_download_cleanup: true
 sonar_install_dir: /opt
+
+# database connection details
+sonar_database: postgresql
+
+sonar_database_name: sonar
+sonar_database_host: localhost
+sonar_database_port: "5432"
+
+sonar_database_username: sonar
+sonar_database_password: sonar

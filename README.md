@@ -16,6 +16,15 @@ Available variables are listed below, along with default values:
     sonar_download_cleanup: true
     sonar_install_dir: /opt
 
+    sonar_database: postgresql
+
+    sonar_database_name: sonar
+    sonar_database_host: localhost
+    sonar_database_port: "5432"
+
+    sonar_database_username: sonar
+    sonar_database_password: sonar
+
 ## Dependencies
 
 None.
