@@ -1,5 +1,7 @@
 # Ansible Role - SonarQube
 
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/wolffaxn/ansible-role-sonarqube/master/LICENSE)
+
 Installs SonarQube for RedHat/CentOS linux servers.
 
 ## Requirements
