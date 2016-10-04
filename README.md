@@ -12,7 +12,7 @@ None.
 
 Available variables are listed below, along with default values:
 
-    sonar_version: 5.6
+    sonar_version: 6.0
 
     sonar_download_dir: /tmp
     sonar_download_cleanup: true
