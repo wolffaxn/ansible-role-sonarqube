@@ -65,7 +65,7 @@
     dest: "{{ sonar_install_dir }}/sonarqube-{{ sonar_version }}/conf/sonar.properties"
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
-  notify: restart sonar
+  notify: restart sonarqube
   with_items:
     - regexp: "^sonar.jdbc.username"
       line: "sonar.jdbc.username={{ sonar_database_username }}"
